@@ -10,6 +10,15 @@ const dateAttributeInMonths = '/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2142
 const dateAttribute = '/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2180';
 
 class App extends Component {
+    // set a state
+    state = {
+        month: '1'
+    };
+
+    getDay(year, month) {
+        const date = new Date((new Date(year, month, 0)));
+        return date.getDate();
+    };
 
     getMonthFilter() {
         return {
@@ -17,11 +26,16 @@ class App extends Component {
                 dataSet: {
                     uri: dateAttribute
                 },
-                from: '2016-01-01',
-                to: '2016-01-31'
+                from: `2016-${this.state.month}-01`,
+                to: `2016-${this.state.month}-${this.getDay(2016, this.state.month)}`
             }
 
         }
+    }
+
+    // on change handler
+    changeMonth = (event) => {
+        this.setState({month: event.target.value});
     }
 
     getMeasures() {
@@ -54,9 +68,10 @@ class App extends Component {
         }
     }
 
+    //call the on change handler here
     renderDropdown() {
         return (
-            <select defaultValue="1">
+            <select defaultValue="1" onChange={this.changeMonth}>
                 <option value="1">January</option>
                 <option value="2">February</option>
                 <option value="3">March</option>
@@ -75,9 +90,10 @@ class App extends Component {
 
     render() {
         const projectId = 'xms7ga4tf3g3nzucd8380o2bev8oeknp';
-        const filters = [this.getMonthFilter()];
+        const filters = [this.getMonthFilter(this.state.month)];
         const measures = this.getMeasures();
         const viewBy = this.getViewBy();
+        
 
         return (
             <div className="App">
